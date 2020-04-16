@@ -5,6 +5,9 @@ class BluetoothDevice {
   /// Broadcasted friendly name of the device.
   final String name;
 
+  /// Locally modified alias of the device.
+  final String alias;
+
   /// MAC address of the device or identificator for platform system (if MAC addresses are prohibited).
   final String address;
 
@@ -30,6 +33,7 @@ class BluetoothDevice {
   /// Construct `BluetoothDevice` with given values.
   const BluetoothDevice({
     this.name,
+    this.alias,
     this.address,
     this.type = BluetoothDeviceType.unknown,
     this.isConnected = false,
@@ -42,6 +46,7 @@ class BluetoothDevice {
   factory BluetoothDevice.fromMap(Map map) {
     return BluetoothDevice(
       name: map["name"],
+      alias: map["alias"],
       address: map["address"],
       type: map["type"] != null
           ? BluetoothDeviceType.fromUnderlyingValue(map["type"])
@@ -56,6 +61,7 @@ class BluetoothDevice {
   /// Creates map from `BluetoothDevice`.
   Map<String, dynamic> toMap() => {
         "name": this.name,
+        "alias": this.alias,
         "address": this.address,
         "type": this.type.toUnderlyingValue(),
         "isConnected": this.isConnected,

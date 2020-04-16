@@ -5,6 +5,7 @@ class FlutterBluetoothSerial {
   static const String namespace = 'flutter_bluetooth_serial';
 
   static FlutterBluetoothSerial _instance = new FlutterBluetoothSerial._();
+
   static FlutterBluetoothSerial get instance => _instance;
 
   static final MethodChannel _methodChannel =
@@ -29,6 +30,7 @@ class FlutterBluetoothSerial {
   }
 
   /* Status */
+
   /// Checks is the Bluetooth interface avaliable on host device.
   Future<bool> get isAvailable async =>
       await _methodChannel.invokeMethod('isAvailable');
@@ -78,6 +80,7 @@ class FlutterBluetoothSerial {
       _methodChannel.invokeMethod("setName", {"name": name});
 
   /* Adapter settings and general */
+
   /// Tries to enable Bluetooth interface (if disabled).
   /// Probably results in asking user for confirmation.
   Future<bool> requestEnable() async =>
@@ -92,6 +95,7 @@ class FlutterBluetoothSerial {
       await _methodChannel.invokeMethod('openSettings');
 
   /* Discovering and bonding devices */
+
   /// Checks bond state for given address (might be from system cache).
   Future<BluetoothBondState> getBondStateForAddress(String address) async {
     return BluetoothBondState.fromUnderlyingValue(await _methodChannel
@@ -245,6 +249,20 @@ class FlutterBluetoothSerial {
   Future<int> requestDiscoverable(int durationInSeconds) async =>
       await _methodChannel
           .invokeMethod("requestDiscoverable", {"duration": durationInSeconds});
+
+  /* Manipulating individual remote devices */
+
+  /// Sets the remote device's name property that is captured in [BluetoothDevice.name].
+  Future<void> setNameOfDevice(
+      {@required String address, @required String newName}) async {
+    assert(address != null && address.length > 0,
+        "device address should be non-null and non-empty string");
+    assert(newName != null && newName.length > 0,
+        "new name should be non-null and non-empty string");
+
+    await _methodChannel.invokeMethod(
+        "setNameOfDevice", {"address": address, "newName": newName});
+  }
 
   /* Connecting and connection */
   // Default connection methods
